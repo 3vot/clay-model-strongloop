@@ -1,5 +1,7 @@
 var Q = require("kew");
 var Request = require("superagent")
+var Qs = require('qs');
+var QueryString = require("querystring");
 
 var Ajax = function(eventName, model, options){
   if(eventName == "create") return Ajax.post.call(this, model,options )
@@ -13,6 +15,8 @@ var Ajax = function(eventName, model, options){
   else if(eventName == "api") return Ajax.api.call(this, params, options);
 
 }
+
+Ajax.host = "";
 
 Ajax.vfr = function(remoteAction, options){
   if(typeof remoteAction != "string" ) throw "First Argument should be the Remote Action (string)"
@@ -44,11 +48,14 @@ Ajax.query = function(params, options){
   //var pctEncodeSpaces = true;
 //  var params = encodeURIComponent(params).replace(/%40/gi, '@').replace(/%3A/gi, ':').replace(/%24/g, '$').replace(/%2C/gi, ',').replace(/%20/g, pctEncodeSpaces ? '%20' : '+');
   
-  
   var deferred = Q.defer();
+console.log(params)
+console.log(Qs.stringify( params ))
 
   Request.get( Ajax.generateURL(this) )
-  .query( "filter", params )
+  //.set('X-Requested-With', true)
+  .query( Qs.stringify( params ) )
+  .withCredentials()
   .end( function( err, res ){ 
     if( err ) return deferred.reject( err );
     
@@ -57,20 +64,10 @@ Ajax.query = function(params, options){
       //delete results[i].Id;
     };
     
-    deferred.resolve( err )
+    deferred.resolve( res )
   });
   return deferred.promise;
 
-
-  var send = VFR(this.ajax.namespace + "ThreeVotApiController.handleRest" );
-  return send( "get", "/query?query=" + params , "" )
-  .then(function(results){ 
-    for (var i = results.length - 1; i >= 0; i--) {
-      results[i].id = results[i].Id
-      delete results[i].Id;
-    };
-    return results;
-   })
 }
 
 Ajax.get = function(id, options){
@@ -142,7 +139,8 @@ Ajax.generateURL = function() {
   path = args.join('/');
   path = path.replace(/(\/\/)/g, "/");
   path = path.replace(/^\/|\/$/g, "");
-  return "/"+path;
+  
+  return  Ajax.host + "/"+path + "s";
 };
 
 Ajax.handleResultWithPromise = function(err, result, nullok, deferred) {
