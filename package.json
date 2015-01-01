@@ -1,0 +1,28 @@
+{
+  "name": "clay-model-loopstrong",
+  "version": "0.0.1",
+  "description": "Clay Model Connector for StrongLoop",
+  "main": "index.js",
+  "scripts": {
+    "test": "tape ./test/index.js"
+  },
+  "author": {
+    "name": "roberto@rodriguezartavia.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/3vot/clay-model-strongloop"
+  },
+  "license": "BSD-2-Clause",
+  "dependencies": {
+    "clay-model": "0.0.4",
+    "superagent": "~0.21.0"
+  },
+  "devDependencies": {
+    "tape": "~2.4.0"
+  },
+  "readmeFilename": "README.md",
+  "bugs": {
+    "url": "https://github.com/3vot/clay-model-strongloop/issues"
+  }
+}
